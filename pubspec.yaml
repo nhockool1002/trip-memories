@@ -1,0 +1,29 @@
+name: trip_memories
+description: A Flutter app for saving travel memories locally.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: any
+  flutter_map: any
+  geolocator: any
+  http: any
+  image_picker: any
+  latlong2: any
+  path: any
+  path_provider: any
+  permission_handler: any
+  sqflite: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+flutter:
+  uses-material-design: true

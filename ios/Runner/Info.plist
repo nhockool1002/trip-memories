@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Trip Memories cần camera để chụp ảnh kỷ niệm.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Trip Memories cần vị trí để hiển thị bạn trên bản đồ và lưu địa điểm.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Trip Memories cần truy cập thư viện ảnh để đính kèm ảnh kỷ niệm.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Trip Memories có thể lưu ảnh kỷ niệm vào thư viện khi cần.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+</dict>
+</plist>

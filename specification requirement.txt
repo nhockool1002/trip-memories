@@ -1,0 +1,111 @@
+# TÀI LIỆU ĐẶC TẢ YÊU CẦU PHẦN MỀM (SRS)
+**Tên dự án:** Trip Memories  
+**Nền tảng:** Cross-Platform (iOS ưu tiên phát triển trước, Android theo sau)  
+**Giai đoạn:** 1 - Local Storage (Lưu trữ cục bộ)  
+**Công nghệ:** Flutter  
+**Kiến trúc UI:** Atomic Design  
+
+---
+
+## 1. TỔNG QUAN DỰ ÁN
+### 1.1. Mục đích
+Trip Memories là một ứng dụng di động cho phép người dùng ghi lại, quản lý và lưu giữ những kỷ niệm du lịch hoặc các địa điểm yêu thích. Trong Giai đoạn 1, ứng dụng tập trung vào trải nghiệm cốt lõi: định vị, tìm kiếm, đánh dấu bản đồ và lưu trữ dữ liệu cá nhân hoàn toàn trên thiết bị (Local Storage).
+
+### 1.2. Đối tượng sử dụng
+- Những người yêu thích du lịch, phượt thủ.
+- Người dùng muốn ghi chú lại các địa điểm ăn uống, vui chơi cá nhân.
+
+---
+
+## 2. YÊU CẦU CÔNG NGHỆ (TECH STACK)
+- **Framework:** Flutter (phiên bản stable mới nhất).
+- **Ngôn ngữ:** Dart.
+- **Local Storage:** `sqflite` (hoặc `isar` / `hive`) kết hợp với `path_provider` để lưu trữ file ảnh.
+- **Bản đồ (Map):** `Maps_flutter` (hoặc `flutter_map` nếu dùng open-source map) & `geolocator` để lấy vị trí.
+- **Quản lý trạng thái (State Management):** Riverpod, BLoC hoặc GetX (Khuyến nghị Riverpod hoặc BLoC cho dự án scale lớn).
+- **Kiến trúc UI:** Atomic Design (Atoms, Molecules, Organisms, Templates, Pages).
+
+---
+
+## 3. YÊU CẦU CHỨC NĂNG (FUNCTIONAL REQUIREMENTS)
+
+### 3.1. Module Bản đồ & Định vị (Map & Location)
+- **F-01 (Hiển thị bản đồ):** Ứng dụng tải và hiển thị bản đồ trực quan (Google Maps) khi mở app.
+- **F-02 (Định vị hiện tại):** Tự động yêu cầu quyền truy cập vị trí và hiển thị marker tại vị trí hiện tại của người dùng. Có nút "My Location" để đưa camera về lại vị trí người dùng.
+- **F-03 (Tìm kiếm địa điểm):** Thanh tìm kiếm cho phép gõ tên địa điểm, hiển thị danh sách gợi ý và di chuyển camera bản đồ đến điểm được chọn.
+
+### 3.2. Module Đánh dấu & Ghi chú (Pin & Note)
+- **F-04 (Tạo Marker):** Người dùng có thể nhấn giữ (long-press) trên bản đồ hoặc chọn từ kết quả tìm kiếm để tạo một điểm đánh dấu mới.
+- **F-05 (Thêm thông tin kỷ niệm):** Khi tạo marker, popup/bottom sheet hiện ra cho phép nhập:
+  - Tên địa điểm (Bắt buộc).
+  - Ghi chú/Mô tả kỷ niệm.
+  - Đính kèm hình ảnh (Dùng camera hoặc thư viện ảnh).
+- **F-06 (Giới hạn hình ảnh):** Tạm thời giới hạn tối đa 3-5 hình ảnh cho mỗi địa điểm để tối ưu dung lượng local. Ảnh được copy vào thư mục của app (`path_provider`).
+
+### 3.3. Module Danh sách lưu trữ (List View)
+- **F-07 (Xem danh sách):** Một màn hình (hoặc tab) hiển thị danh sách tất cả các điểm đã lưu.
+- **F-08 (Tương tác danh sách):**
+  - Nhấn vào một item trong danh sách để xem chi tiết (Tên, Ghi chú, Ảnh).
+  - Có nút "Xem trên bản đồ" để chuyển hướng về màn hình Map và focus vào marker đó.
+  - Vuốt để xóa (Swipe to delete) hoặc nút chỉnh sửa/xóa địa điểm.
+
+---
+
+## 4. YÊU CẦU PHI CHỨC NĂNG (NON-FUNCTIONAL REQUIREMENTS)
+
+- **UI/UX (Giao diện trực quan hiện đại):** - Tuân thủ thiết kế phẳng (Flat Design) hoặc Material 3 / Cupertino. 
+  - Giao diện mượt mà, thân thiện. Hỗ trợ Dark Mode (tuỳ chọn thêm).
+- **Tổ chức thư mục (Atomic Design):**
+  - *Atoms:* Nút bấm, Icon, Typography, Text Field cơ bản.
+  - *Molecules:* Thanh tìm kiếm (Search Bar), Item trong danh sách (List Tile).
+  - *Organisms:* Form thêm kỷ niệm (gồm text field, nút thêm ảnh, nút lưu), Map View.
+  - *Templates:* Bố cục chung của màn hình Bản đồ, màn hình Danh sách.
+  - *Pages:* Map Page, Memory List Page, Memory Detail Page.
+- **Hiệu năng:** Thao tác vuốt, zoom bản đồ phải mượt mà (60fps). Thao tác đọc/ghi Local Storage diễn ra dưới background thread (async/await) không gây block UI.
+- **Quyền (Permissions):** Xử lý mượt mà các trường hợp từ chối quyền (Vị trí, Camera, Thư viện ảnh).
+
+---
+---
+
+# KẾ HOẠCH TRIỂN KHAI DỰ ÁN (IMPLEMENTATION PLAN)
+**Ước tính thời gian Giai đoạn 1:** 4 - 5 tuần.
+
+### Tuần 1: Thiết lập dự án & UI cơ bản (Project Setup & Atomic UI)
+- **Khởi tạo:** Tạo project Flutter, thiết lập bundle ID cho iOS (`com.yourname.tripmemories`).
+- **Cấu hình Git:** Setup Git repository, tạo branch structure.
+- **Cấu trúc thư mục:** Dựng bộ khung thư mục theo tiêu chuẩn Atomic Design.
+- **Phát triển UI Component (Không logic):**
+  - Build các *Atoms* (Colors, Text Styles, Custom Buttons, Icons).
+  - Build các *Molecules* (Search input, Memory List Item).
+  - Build các *Pages* cơ bản (Bottom Navigation, Màn hình Map rỗng, Màn hình danh sách rỗng).
+
+### Tuần 2: Tích hợp Bản đồ & Vị trí (Map & Location)
+- **Cài đặt thư viện:** `Maps_flutter`, `geolocator`, `permission_handler`.
+- **Cấu hình API Key:** Lấy Google Maps API Key cho iOS (sau này là Android) và config vào file `AppDelegate.swift` / `Info.plist`.
+- **Tính năng Vị trí:** Xử lý luồng xin quyền vị trí, lấy toạ độ hiện tại.
+- **Tính năng Bản đồ:** Render bản đồ, hiển thị User Location, chức năng Move Camera về vị trí hiện tại.
+- **Tính năng Tìm kiếm:** Tích hợp Google Places API (hoặc Geocoding API) để làm thanh tìm kiếm địa điểm.
+
+### Tuần 3: Lưu trữ cục bộ & Logic Đánh dấu (Local Storage & Pinning)
+- **Thiết kế Database:** Tạo model `MemoryItem` (id, title, note, latitude, longitude, list_of_image_paths, created_at).
+- **Cài đặt Storage:** Setup `sqflite` (hoặc `isar`) và viết các hàm CRUD (Create, Read, Update, Delete) cho database.
+- **Tương tác Bản đồ:** Lập trình sự kiện nhấn giữ (onLongPress) trên map để sinh ra một temporary marker.
+- **Tích hợp form:** Hiển thị Bottom Sheet / Dialog yêu cầu nhập Tên và Ghi chú. Nhấn Lưu -> Ghi vào Local DB.
+
+### Tuần 4: Xử lý Hình ảnh & Hoàn thiện màn Danh sách (Media & List View)
+- **Cài đặt thư viện:** `image_picker`, `path_provider`.
+- **Xử lý hình ảnh:** - Chức năng chọn ảnh từ Gallery / Camera.
+  - Lưu file ảnh vật lý vào thư mục Document của app, lấy đường dẫn lưu vào Local DB.
+  - Giới hạn số lượng ảnh tải lên.
+- **Màn hình Danh sách:** - Truy vấn Local DB, hiển thị danh sách các điểm đã lưu bằng ListView/GridView.
+  - Tích hợp chức năng vuốt để xóa, click để xem chi tiết.
+  - Load hình ảnh từ đường dẫn local.
+
+### Tuần 5: Kiểm thử, Tối ưu & Build (Testing, Optimization & Build)
+- **Kiểm thử (Testing):**
+  - Test trên Simulator iOS (nhiều kích thước màn hình).
+  - Test trên thiết bị thật (Real Device iOS) để kiểm tra độ giật lag của Map và Camera.
+- **Xử lý lỗi (Edge Cases):** - Mất kết nối mạng khi tìm địa điểm.
+  - Người dùng không cấp quyền vị trí/camera.
+- **Chuẩn bị Android:** Cấu hình key, manifest và test nhẹ trên máy ảo Android để đảm bảo tính Cross-platform không bị lỗi.
+- **Release:** Đóng gói bản build iOS (.ipa) bằng TestFlight để trải nghiệm thực tế.
